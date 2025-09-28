@@ -1,0 +1,50 @@
+plugins {
+    id 'java-library'
+}
+
+group = 'com.github.h4xx-d3nt1st'   // для JitPack координат
+version = 'unspecified'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(11)
+    }
+    withJavadocJar()
+    withSourcesJar()
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // если не нужны зависимости — оставь пусто
+    // implementation 'org.jetbrains:annotations:24.0.1'
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+}
+
+plugins {
+    id 'maven-publish'
+}
+
+group = 'com.github.h4xx-d3nt1st'
+// version JitPack подставит из тега; локально можно не задавать
+
+java {
+    withSourcesJar()
+    withJavadocJar()
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+            groupId = 'com.github.h4xx-d3nt1st'
+            artifactId = 'IsDayOff'
+            // version JitPack берёт из git-тега (v1.0.1 и т.п.)
+        }
+    }
+}
