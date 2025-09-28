@@ -1,50 +1,47 @@
 plugins {
     id 'java-library'
+    id 'maven-publish'
 }
 
-group = 'com.github.h4xx-d3nt1st'   // для JitPack координат
-version = 'unspecified'
+group = 'com.github.h4xx-d3nt1st'
+version = (project.findProperty("version") ?: System.getenv("VERSION") ?: "0.0.0-SNAPSHOT")
 
 java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(11)
-    }
-    withJavadocJar()
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
     withSourcesJar()
+    withJavadocJar()
 }
 
 repositories {
     mavenCentral()
 }
 
-dependencies {
-    // если не нужны зависимости — оставь пусто
-    // implementation 'org.jetbrains:annotations:24.0.1'
-}
-
-tasks.withType(JavaCompile).configureEach {
-    options.encoding = 'UTF-8'
-}
-
-plugins {
-    id 'maven-publish'
-}
-
-group = 'com.github.h4xx-d3nt1st'
-// version JitPack подставит из тега; локально можно не задавать
-
-java {
-    withSourcesJar()
-    withJavadocJar()
+sourceSets {
+    main {
+        java {
+            srcDirs = ['lib']   // у Dakla исходники лежат в lib/
+        }
+    }
+    test {
+        java {
+            srcDirs = ['src/test/java']
+        }
+    }
 }
 
 publishing {
     publications {
         mavenJava(MavenPublication) {
             from components.java
-            groupId = 'com.github.h4xx-d3nt1st'
+            groupId = project.group
             artifactId = 'IsDayOff'
-            // version JitPack берёт из git-тега (v1.0.1 и т.п.)
+            version = project.version
         }
     }
+}
+
+dependencies {
+    // Нужна только для компиляции (в рантайме не требуется)
+    compileOnly 'com.google.code.findbugs:jsr305:3.0.2'
 }
