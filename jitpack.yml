@@ -1,4 +1,6 @@
 jdk:
   - openjdk17
+before_install:
+  - chmod +x gradlew
 install:
-  - ./gradlew -Pversion=${VERSION} clean build publishToMavenLocal
+  - ./gradlew -Pversion=${VERSION} clean build publishToMavenLocal -x test
