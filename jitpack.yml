@@ -1,4 +1,4 @@
 jdk:
   - openjdk17
 install:
-  - ./gradlew -Pversion=${VERSION} publishToMavenLocal
+  - ./gradlew -Pversion=${VERSION} clean build publishToMavenLocal
